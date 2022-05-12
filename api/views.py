@@ -3,7 +3,16 @@ from django.shortcuts import render
 def index(request):
     return render(request, 'chat/index.html', {})
 
-def room(request, room_name):
-    return render(request, 'chat/room.html', {
-        'room_name': room_name
+def guest(request):
+    return render(request, 'chat/guest.html', {
+        'room_name': 'orders'
     })
+
+def cook(request):
+    return render(request, 'chat/cook.html', {
+        'room_name': 'orders'
+    })
+    
+
+
+
