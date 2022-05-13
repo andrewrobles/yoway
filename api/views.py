@@ -3,13 +3,13 @@ from django.shortcuts import render
 def index(request):
     return render(request, 'chat/index.html', {})
 
-def guest(request):
-    return render(request, 'chat/guest.html', {
+def order(request):
+    return render(request, 'chat/order.html', {
         'room_name': 'orders'
     })
 
-def host(request):
-    return render(request, 'chat/host.html', {
+def kitchen(request):
+    return render(request, 'chat/kitchen.html', {
         'room_name': 'orders'
     })
     
