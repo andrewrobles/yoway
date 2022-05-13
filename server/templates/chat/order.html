@@ -10,6 +10,15 @@
     <input id="name-input" type="text" size="100"><br>
     <span>Specific instructions:</span>
     <input id="instructions-input" type="text" size="100"><br>
+    {% if foods %}
+        <ul>
+        {% for food in foods %}
+            <li>{{ food.name }}</li>
+        {% endfor %}
+            </ul>
+        {% else %}
+            <p>No foods are available.</p>
+    {% endif %}
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
