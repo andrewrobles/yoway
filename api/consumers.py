@@ -35,7 +35,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if name:
             await sync_to_async(Order.objects.create)(
                 name=name, 
-                # instructions=instructions
+                instructions=instructions
             )
 
         # Send message to room group
