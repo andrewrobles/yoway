@@ -7,7 +7,9 @@
 </head>
 <body>
     <span>Name for the order:</span>
-    <input id="guest-name-input" type="text" size="100"><br>
+    <input id="name-input" type="text" size="100"><br>
+    <span>Specific instructions:</span>
+    <input id="instructions-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
@@ -29,20 +31,19 @@
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#guest-name-input').focus();
-        document.querySelector('#guest-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
+        document.querySelector('#name-input').focus();
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
-            const nameInputDom = document.querySelector('#guest-name-input');
+            const nameInputDom = document.querySelector('#name-input');
+            const instructionsInputDom = document.querySelector('#instructions-input');
             const name = nameInputDom.value;
+            const instructions = instructionsInputDom.value;
             chatSocket.send(JSON.stringify({
-                'name': name
+                'name': name,
+                'instructions': instructions
             }));
             nameInputDom.value = '';
+            instructionsInputDom.value = '';
         };
     </script>
 </body>
