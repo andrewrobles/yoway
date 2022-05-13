@@ -37,12 +37,12 @@
         };
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
-            const guestNameInputDom = document.querySelector('#guest-name-input');
-            const guestName = guestNameInputDom.value;
+            const nameInputDom = document.querySelector('#guest-name-input');
+            const name = nameInputDom.value;
             chatSocket.send(JSON.stringify({
-                'guestName': guestName
+                'name': name
             }));
-            guestNameInputDom.value = '';
+            nameInputDom.value = '';
         };
     </script>
 </body>
