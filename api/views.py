@@ -8,8 +8,8 @@ def guest(request):
         'room_name': 'orders'
     })
 
-def cook(request):
-    return render(request, 'chat/cook.html', {
+def host(request):
+    return render(request, 'chat/host.html', {
         'room_name': 'orders'
     })
     
