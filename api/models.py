@@ -5,4 +5,4 @@ class Order(models.Model):
     instructions = models.TextField(max_length=95)
 
     def __str__(self):
-        return f'name={self.name} instructions={self.instructions}'
+        return f'{self.name} {self.instructions}'
