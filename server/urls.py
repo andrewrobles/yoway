@@ -1,9 +1,10 @@
-# mysite/urls.py
-from django.conf.urls import include
+# chat/urls.py
 from django.urls import path
-from django.contrib import admin
+
+from . import views
 
 urlpatterns = [
-    path('yoway/', include('api.urls')),
-    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('order/', views.order, name='order'),
+    path('kitchen/', views.kitchen, name='name'),
 ]
