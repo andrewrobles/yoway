@@ -13,7 +13,8 @@
     {% if foods %}
         <ul>
         {% for food in foods %}
-            <li>{{ food.name }}</li>
+            <input type="checkbox" id="{{ food.id }}">
+            <label for="{{ food.id }}">{{food.name}}</label><br>
         {% endfor %}
             </ul>
         {% else %}
