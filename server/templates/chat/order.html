@@ -12,11 +12,17 @@
     <input id="instructions-input" type="text" size="100"><br>
     {% if foods %}
         {% for food in foods %}
-            <input type="checkbox" id="{{ food.id }}" class="foodCheckbox" name="foodCheckbox">
+            <input 
+                type="checkbox" 
+                id="{{ food.id }}" 
+                class="foodCheckbox" 
+                name="foodCheckbox"
+                onChange="toggleDisableQuantityButtons(this, '{{ food.id }}')"
+            >
             <label for="{{ food.id }}">{{food.name}}</label>
-            <input id="quantity{{ food.id }}" type=number min=0 max=9 value=0>
-            <button onclick="increment('quantity{{ food.id }}')">+</button>
-            <button onclick="decrement('quantity{{ food.id }}')">-</button>
+            <input id="quantity{{ food.id }}" type=number min=1 max=9 value=1>
+            <button id="+{{ food.id }}" onclick="increment('quantity{{ food.id }}')" disabled>+</button>
+            <button id="-{{ food.id }}" onclick="decrement('quantity{{ food.id }}')" disabled>-</button>
             <br>
         {% endfor %}
         {% else %}
@@ -25,6 +31,11 @@
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
+        function toggleDisableQuantityButtons(checkbox, foodId) {
+            document.getElementById('+' + foodId).disabled = !checkbox.checked;
+            document.getElementById('-' + foodId).disabled = !checkbox.checked;
+        }
+
         function increment(inputId) {
             document.getElementById(inputId).stepUp();
         }
