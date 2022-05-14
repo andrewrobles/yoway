@@ -3,7 +3,7 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .models import Order, Food
+from .models import Food, Order, FoodOrder
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -33,7 +33,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         instructions = text_data_json.get('instructions', '')
         selected_food_ids = text_data_json.get('selectedFoodIds', [])        
         if name:
-            await sync_to_async(self.submit_order)(name, instructions, selected_food_ids)
+            await sync_to_async(self.submit_order)(
+                name, 
+                instructions, 
+                selected_food_ids
+            )
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -45,14 +49,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
     
     def submit_order(self, name, instructions, selected_food_ids):
-        print(f'selected_food_ids:{selected_food_ids}')
-        order = Order.objects.create(
-            name=name, 
-            instructions=instructions
-        )
         for id in selected_food_ids:
-            food = Food.objects.get(id=id)
-            order.food.add(food)
+            FoodOrder.objects.create(
+                quantity=1,
+                food=Food.objects.get(id=id),
+                order=Order.objects.create(
+                    name=name, 
+                    instructions=instructions
+                )
+            )
 
     # Receive message from room group
     async def chat_message(self, event):
