@@ -11,12 +11,12 @@
     <span>Specific instructions:</span>
     <input id="instructions-input" type="text" size="100"><br>
     {% if foods %}
-        <ul>
+        <!-- <ul> -->
         {% for food in foods %}
-            <input type="checkbox" id="{{ food.id }}">
+            <input type="checkbox" id="{{ food.id }}" class="foodCheckbox" name="foodCheckbox">
             <label for="{{ food.id }}">{{food.name}}</label><br>
         {% endfor %}
-            </ul>
+            <!-- </ul> -->
         {% else %}
             <p>No foods are available.</p>
     {% endif %}
@@ -43,6 +43,25 @@
 
         document.querySelector('#name-input').focus();
 
+        // Pass the checkbox name to the function
+        function getCheckedBoxes(checkboxName) {
+            var selectedFoodIds = [];
+            var checkboxes = document.getElementsByName(checkboxName);
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    selectedFoodIds.push(checkboxes[i].id);
+                }
+            }
+            return selectedFoodIds;
+        }
+
+        function uncheckBoxes(checkboxName) {
+            var checkboxes = document.getElementsByName(checkboxName);
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = false
+            }
+        }
+
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const nameInputDom = document.querySelector('#name-input');
             const instructionsInputDom = document.querySelector('#instructions-input');
@@ -50,10 +69,12 @@
             const instructions = instructionsInputDom.value;
             chatSocket.send(JSON.stringify({
                 'name': name,
-                'instructions': instructions
+                'instructions': instructions,
+                'selectedFoodIds': getCheckedBoxes("foodCheckbox"),
             }));
             nameInputDom.value = '';
             instructionsInputDom.value = '';
+            uncheckBoxes('foodCheckbox');
         };
     </script>
 </body>

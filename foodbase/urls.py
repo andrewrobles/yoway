@@ -4,6 +4,6 @@ from django.urls import path
 from django.contrib import admin
 
 urlpatterns = [
-    path('yoway/', include('server.urls')),
     path('admin/', admin.site.urls),
+    path('', include('server.urls')),
 ]

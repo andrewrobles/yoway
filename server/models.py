@@ -7,7 +7,7 @@ class Order(models.Model):
     instructions = models.TextField(max_length=95)
 
     def __str__(self):
-        return f'{self.name} {self.instructions}'
+        return f'{self.name} {self.instructions}' + ' ' + ', '.join([food.__str__() for food in self.food.all()])
 
 
 class Food(models.Model):
