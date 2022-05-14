@@ -20,9 +20,9 @@
                 onChange="toggleDisableQuantityButtons(this, '{{ food.id }}')"
             >
             <label for="{{ food.id }}">{{food.name}}</label>
-            <input id="quantity{{ food.id }}" type=number min=1 max=9 value=1>
-            <button id="+{{ food.id }}" onclick="increment('quantity{{ food.id }}')" disabled>+</button>
-            <button id="-{{ food.id }}" onclick="decrement('quantity{{ food.id }}')" disabled>-</button>
+            <input id="foodQuantity{{ food.id }}" type=number min=1 max=9 value=1>
+            <button id="incrementFoodQuantity{{ food.id }}" onclick="increment('foodQuantity{{ food.id }}')" disabled>+</button>
+            <button id="decrementFoodQuantity{{ food.id }}" onclick="decrement('foodQuantity{{ food.id }}')" disabled>-</button>
             <br>
         {% endfor %}
         {% else %}
@@ -32,8 +32,8 @@
     {{ room_name|json_script:"room-name" }}
     <script>
         function toggleDisableQuantityButtons(checkbox, foodId) {
-            document.getElementById('+' + foodId).disabled = !checkbox.checked;
-            document.getElementById('-' + foodId).disabled = !checkbox.checked;
+            document.getElementById('incrementFoodQuantity' + foodId).disabled = !checkbox.checked;
+            document.getElementById('decrementFoodQuantity' + foodId).disabled = !checkbox.checked;
         }
 
         function increment(inputId) {
