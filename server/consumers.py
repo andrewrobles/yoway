@@ -31,12 +31,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         name = text_data_json.get('name', None)
         instructions = text_data_json.get('instructions', '')
-        selected_food_ids = text_data_json.get('selectedFoodIds', [])        
+        food_orders = text_data_json.get('foodOrders', [])
         if name:
             await sync_to_async(self.submit_order)(
                 name, 
                 instructions, 
-                selected_food_ids
+                food_orders
             )
         # Send message to room group
         await self.channel_layer.group_send(
@@ -48,15 +48,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
     
-    def submit_order(self, name, instructions, selected_food_ids):
-        for id in selected_food_ids:
+    def submit_order(self, name, instructions, food_orders):
+        order = Order.objects.create(
+            instructions=instructions,
+            name=name, 
+        )
+        for food_order in food_orders:
             FoodOrder.objects.create(
-                quantity=1,
-                food=Food.objects.get(id=id),
-                order=Order.objects.create(
-                    name=name, 
-                    instructions=instructions
-                )
+                food = Food.objects.get(id=food_order['foodId']),
+                quantity=food_order['foodQuantity'],
+                order = order,
             )
 
     # Receive message from room group
