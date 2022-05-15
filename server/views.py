@@ -23,6 +23,7 @@ def get_orders():
     return [{
         'id': order.id,
         'name': order.name,
+        'done': order.done,
         'instructions': order.instructions,
         'foods': [{
             'name': food_order.food.name,
