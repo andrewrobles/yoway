@@ -19,7 +19,7 @@
                 name="foodCheckbox"
                 onChange="enableFoodQuantityButtonIfCheckedElseDisable(this, '{{ food.id }}')"
             >
-            <label for="{{ food.id }}">{{food.name}}</label>
+            <label id="foodLabel{{ food.id }}" for="{{ food.id }}">{{food.name}}</label>
             <input id="foodQuantity{{ food.id }}" class="foodQuantityInput" type=number min=1 max=9 value=1>
             <button id="incrementFoodQuantity{{ food.id }}" class="foodQuantityButton" onclick="increment('foodQuantity{{ food.id }}')" disabled>+</button>
             <button id="decrementFoodQuantity{{ food.id }}" class="foodQuantityButton" onclick="decrement('foodQuantity{{ food.id }}')" disabled>-</button>
@@ -77,6 +77,7 @@
                 if (checkboxes[i].checked) {
                     orderFormRequestBody.foodOrders.push({
                         foodId: checkboxes[i].id,
+                        foodName: document.getElementById("foodLabel" + checkboxes[i].id).textContent,
                         foodQuantity: document.getElementById("foodQuantity" + checkboxes[i].id).value
                     })
                 }
@@ -119,6 +120,7 @@
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const orderFormRequestBody = getOrderFormRequestBody()
+            console.log(orderFormRequestBody)
             chatSocket.send(JSON.stringify(orderFormRequestBody))
             resetForm()
         };

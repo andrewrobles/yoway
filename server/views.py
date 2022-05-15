@@ -1,3 +1,4 @@
+# from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from .models import Food
@@ -11,6 +12,7 @@ def order(request):
         'foods': Food.objects.all()
     })
 
+# @login_required(login_url='/admin/')
 def kitchen(request):
     return render(request, 'chat/kitchen.html', {
         'room_name': 'orders'

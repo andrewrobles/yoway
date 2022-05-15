@@ -21,7 +21,13 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.name + '\n' + data.instructions + '\n\n');
+            var incomingOrder = (data.name + '\n' + data.instructions + '\n')
+            for (var i = 0; i < data.foodOrders.length; i++) {
+                incomingOrder += (data.foodOrders[i].foodQuantity + ' ' +data.foodOrders[i].foodName + '\n')
+            }
+            incomingOrder += '\n'
+
+            document.querySelector('#chat-log').value += incomingOrder;
         };
 
         chatSocket.onclose = function(e) {
