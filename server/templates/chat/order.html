@@ -17,12 +17,12 @@
                 id="{{ food.id }}" 
                 class="foodCheckbox" 
                 name="foodCheckbox"
-                onChange="toggleDisableQuantityButtons(this, '{{ food.id }}')"
+                onChange="enableFoodQuantityButtonIfCheckedElseDisable(this, '{{ food.id }}')"
             >
             <label for="{{ food.id }}">{{food.name}}</label>
-            <input id="foodQuantity{{ food.id }}" type=number min=1 max=9 value=1>
-            <button id="incrementFoodQuantity{{ food.id }}" onclick="increment('foodQuantity{{ food.id }}')" disabled>+</button>
-            <button id="decrementFoodQuantity{{ food.id }}" onclick="decrement('foodQuantity{{ food.id }}')" disabled>-</button>
+            <input id="foodQuantity{{ food.id }}" class="foodQuantityInput" type=number min=1 max=9 value=1>
+            <button id="incrementFoodQuantity{{ food.id }}" class="foodQuantityButton" onclick="increment('foodQuantity{{ food.id }}')" disabled>+</button>
+            <button id="decrementFoodQuantity{{ food.id }}" class="foodQuantityButton" onclick="decrement('foodQuantity{{ food.id }}')" disabled>-</button>
             <br>
         {% endfor %}
         {% else %}
@@ -31,10 +31,12 @@
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
-        function toggleDisableQuantityButtons(checkbox, foodId) {
+        function enableFoodQuantityButtonIfCheckedElseDisable(checkbox, foodId) {
             document.getElementById('incrementFoodQuantity' + foodId).disabled = !checkbox.checked;
             document.getElementById('decrementFoodQuantity' + foodId).disabled = !checkbox.checked;
         }
+
+
 
         function increment(inputId) {
             document.getElementById(inputId).stepUp();
@@ -64,38 +66,61 @@
 
         document.querySelector('#name-input').focus();
 
-        // Pass the checkbox name to the function
-        function getCheckedBoxes(checkboxName) {
-            var selectedFoodIds = [];
-            var checkboxes = document.getElementsByName(checkboxName);
+        function getOrderFormRequestBody() {
+            const orderFormRequestBody = {
+                name: document.querySelector('#name-input').value,
+                instructions: document.querySelector('#instructions-input').value,
+                foodOrders: []
+            }
+            const checkboxes = document.getElementsByName("foodCheckbox")
             for (var i = 0; i < checkboxes.length; i++) {
                 if (checkboxes[i].checked) {
-                    selectedFoodIds.push(checkboxes[i].id);
+                    orderFormRequestBody.foodOrders.push({
+                        foodId: checkboxes[i].id,
+                        foodQuantity: document.getElementById("foodQuantity" + checkboxes[i].id).value
+                    })
                 }
             }
-            return selectedFoodIds;
+            return orderFormRequestBody
         }
 
-        function uncheckBoxes(checkboxName) {
-            var checkboxes = document.getElementsByName(checkboxName);
+        function resetForm() {
+            resetFoodQuantityInputs()
+            disableFoodQuantityButtons()
+            uncheckBoxes()
+            clearForm()
+        }
+
+        function resetFoodQuantityInputs() {
+            const foodQuantityInputs = document.getElementsByClassName('foodQuantityInput')
+            for (var i = 0; i < foodQuantityInputs.length; i++) {
+                foodQuantityInputs[i].value = 1
+            }
+        }
+
+        function disableFoodQuantityButtons() {
+            const foodQuantityButtons = document.getElementsByClassName('foodQuantityButton')
+            for (var i = 0; i < foodQuantityButtons.length; i++) {
+                foodQuantityButtons[i].disabled = true
+            }
+        }
+
+        function uncheckBoxes() {
+            var checkboxes = document.getElementsByName('foodCheckbox');
             for (var i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].checked = false
             }
         }
 
+        function clearForm() {
+            document.querySelector('#name-input').value = ''
+            document.querySelector('#instructions-input').value = ''
+        }
+
         document.querySelector('#chat-message-submit').onclick = function(e) {
-            const nameInputDom = document.querySelector('#name-input');
-            const instructionsInputDom = document.querySelector('#instructions-input');
-            const name = nameInputDom.value;
-            const instructions = instructionsInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'name': name,
-                'instructions': instructions,
-                'selectedFoodIds': getCheckedBoxes("foodCheckbox"),
-            }));
-            nameInputDom.value = '';
-            instructionsInputDom.value = '';
-            uncheckBoxes('foodCheckbox');
+            const orderFormRequestBody = getOrderFormRequestBody()
+            chatSocket.send(JSON.stringify(orderFormRequestBody))
+            resetForm()
         };
     </script>
 </body>
