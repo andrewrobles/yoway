@@ -1,5 +1,5 @@
 # from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Food, Order
 
@@ -14,7 +14,14 @@ def order(request):
 
 # @login_required(login_url='/admin/')
 def kitchen(request):
-    orders = [{
+    return render(request, 'chat/kitchen.html', {
+        'room_name': 'orders',
+        'orders': get_orders()
+    })
+
+def get_orders():
+    return [{
+        'id': order.id,
         'name': order.name,
         'instructions': order.instructions,
         'foods': [{
@@ -22,7 +29,15 @@ def kitchen(request):
             'quantity': food_order.quantity
         } for food_order in order.food_order.all()]
     } for order in Order.objects.all()]
-    return render(request, 'chat/kitchen.html', {
-        'room_name': 'orders',
-        'orders': orders
-    })
+
+def done(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.done = True
+    order.save()
+    return redirect('kitchen')
+
+def not_done(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.done = False
+    order.save()
+    return redirect('kitchen')

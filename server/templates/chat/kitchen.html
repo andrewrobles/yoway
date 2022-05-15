@@ -3,7 +3,8 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Chat Room</title>
+    <title>Kitchen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
     <div id="chat-log" cols="100" rows="20">
@@ -12,7 +13,9 @@
                 {{ order.name }}<br>
                 {{ order.instructions }}<br>
                 {% for food in order.foods %}
-                    {{ food.quantity}} {{ food.name }}<br>                {% endfor %}
+                    {{ food.quantity}} {{ food.name }}<br>                
+                {% endfor %}
+                <a href="{% url 'done' order.id %}">Done</a>
                 <br>
             {% endfor %}
         {% endif %}
