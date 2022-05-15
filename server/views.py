@@ -14,7 +14,10 @@ def order(request):
 
 # @login_required(login_url='/admin/')
 def kitchen(request):
-    orders = Order.objects.all()
+    orders = [{
+        'name': order.name,
+        'instructions': order.instructions
+    } for order in Order.objects.all()]
     return render(request, 'chat/kitchen.html', {
         'room_name': 'orders',
         'orders': orders
