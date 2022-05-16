@@ -3,11 +3,14 @@ from django.db import models
 
 class Food(models.Model):
     name = models.CharField(max_length=45)
+    description = models.TextField(default='')
+
+    def __str__(self):
+        return f'{self.name} {self.description}'
 
 
 class Order(models.Model):
     name = models.CharField(max_length=45)
-    description = models.TextField(default='')
     instructions = models.TextField(default='')
     done = models.BooleanField(default=False)
 
