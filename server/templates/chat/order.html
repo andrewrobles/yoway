@@ -4,9 +4,47 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
+    <!-- CSS only -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
 </head>
 <body>
-    <span>Name for the order:</span>
+    <div class="container">
+        <!-- <form> -->
+            <div class="form-group">
+              <label for="name-input">Name for the order</label>
+              <input type="email" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="instructions-input">Specific Instructions</label>
+                <textarea class="form-control" id="instructions-input" rows="3" placeholder="Examples: toasted, add ingredients, change bread"></textarea>
+                <!-- <small id="instructions-help" class="form-text text-muted">Examples: toasting your sandwich, adding/removing ingredients, changing bread, anything you'd like!</small> -->
+            </div>
+            {% for food in foods %}
+            <div class="form-check">
+              <input 
+                type="checkbox" 
+                class="form-check-input foodCheckbox" 
+                name="foodCheckbox" 
+                id="{{ food.id }}"
+                onChange="enableFoodQuantityButtonIfCheckedElseDisable(this, '{{ food.id }}')"
+            >
+              <label class="form-check-label" for="exampleCheck1">{{ food.name }} - {{ food.description }}</label>
+              <div class="btn-group">
+                <button id="decrementFoodQuantity{{ food.id }}" class="foodQuantityButton btn btn-danger border-secondary" onclick="decrement('foodQuantity{{ food.id }}')" disabled>-</button>
+                <input id="foodQuantity{{ food.id }}" class="foodQuantityInput form-control rounded-0" type=number min=1 max=9 value=1 readonly>
+                <button id="incrementFoodQuantity{{ food.id }}" class="foodQuantityButton btn btn-success border-secondary" onclick="increment('foodQuantity{{ food.id }}')" disabled>+</button>
+              </div>
+             
+            </div>
+            {% endfor %}
+            <input class="btn btn-primary" id="chat-message-submit" type="button" value="Send">
+            <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+          <!-- </form> -->
+    </div>
+    
+    <!-- <span>Name for the order:</span>
     <input id="name-input" type="text" size="100"><br>
     <span>Specific instructions:</span>
     <input id="instructions-input" type="text" size="100"><br>
@@ -19,7 +57,7 @@
                 name="foodCheckbox"
                 onChange="enableFoodQuantityButtonIfCheckedElseDisable(this, '{{ food.id }}')"
             >
-            <label id="foodLabel{{ food.id }}" for="{{ food.id }}">{{food.name}}</label>
+            <label id="foodLabel{{ food.id }}" for="{{ food.id }}">{{food.name}} - {{food.description}}</label>
             <input id="foodQuantity{{ food.id }}" class="foodQuantityInput" type=number min=1 max=9 value=1>
             <button id="incrementFoodQuantity{{ food.id }}" class="foodQuantityButton" onclick="increment('foodQuantity{{ food.id }}')" disabled>+</button>
             <button id="decrementFoodQuantity{{ food.id }}" class="foodQuantityButton" onclick="decrement('foodQuantity{{ food.id }}')" disabled>-</button>
@@ -28,7 +66,7 @@
         {% else %}
             <p>No foods are available.</p>
     {% endif %}
-    <input id="chat-message-submit" type="button" value="Send">
+    <input id="chat-message-submit" type="button" value="Send"> -->
     {{ room_name|json_script:"room-name" }}
     <script>
         function enableFoodQuantityButtonIfCheckedElseDisable(checkbox, foodId) {
