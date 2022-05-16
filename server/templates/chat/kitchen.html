@@ -8,8 +8,9 @@
 </head>
 <body>
     <div class="container" cols="100" rows="20">
-        {% if orders%}
-            {% for order in orders %}
+        <div class="row">
+            <div class="col">
+                {% for order in orders %}
                 {% if order.done == False %}
                 {{ order.name }}<br>
                 {{ order.instructions }}<br>
@@ -17,10 +18,24 @@
                     {{ food.quantity}} {{ food.name }}<br>                
                 {% endfor %}
                 <a href="{% url 'done' order.id %}">Done</a>
-                <br>
+                <br><br>
                 {% endif %}
-            {% endfor %}
-        {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col">
+                {% for order in orders reversed %}
+                {% if order.done == True %}
+                {{ order.name }}<br>
+                {{ order.instructions }}<br>
+                {% for food in order.foods %}
+                    {{ food.quantity}} {{ food.name }}<br>                
+                {% endfor %}
+                <a href="{% url 'not_done' order.id %}">Undo</a>
+                <br><br>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div><br>
     {{ room_name|json_script:"room-name" }}
     <script>
