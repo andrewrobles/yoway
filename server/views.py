@@ -14,12 +14,25 @@ def order(request):
 
 # @login_required(login_url='/admin/')
 def kitchen(request):
+    done = False
     return render(request, 'chat/kitchen.html', {
         'room_name': 'orders',
-        'orders': get_orders()
+        'orders': get_orders(done),
+        'done': done
     })
 
-def get_orders():
+# @login_required(login_url='/admin/')
+def history(request):
+    done = True
+    orders = get_orders(done)
+    orders.reverse()
+    return render(request, 'chat/kitchen.html', {
+        'room_name': 'orders',
+        'orders': orders,
+        'done': done
+    })
+
+def get_orders(done):
     return [{
         'id': order.id,
         'name': order.name,
@@ -29,7 +42,7 @@ def get_orders():
             'name': food_order.food.name,
             'quantity': food_order.quantity
         } for food_order in order.food_order.all()]
-    } for order in Order.objects.all()]
+    } for order in Order.objects.filter(done=done)]
 
 def done(request, order_id):
     order = Order.objects.get(id=order_id)
@@ -41,4 +54,4 @@ def not_done(request, order_id):
     order = Order.objects.get(id=order_id)
     order.done = False
     order.save()
-    return redirect('kitchen')
+    return redirect('history')

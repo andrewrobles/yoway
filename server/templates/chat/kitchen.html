@@ -8,10 +8,29 @@
 </head>
 <body>
     <div class="container">
+        <ul class="nav nav-tabs mb-3 mt-1">
+            <li class="nav-item">
+                {% if done %}
+                    <a class="nav-link" id="incomingOrdersTab" aria-current="page" href="{% url 'kitchen' %}">Incoming orders</a>
+                {% else %}
+                    <a class="nav-link active" id="incomingOrdersTab" aria-current="page" href="{% url 'kitchen' %}">Incoming orders</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if done %}
+                    <a class="nav-link active" id="completedOrdersTab" href="{% url 'history' %}">Completed orders</a>
+                {% else %}
+                    <a class="nav-link" id="completedOrdersTab" href="{% url 'history' %}">Completed orders</a>
+                {% endif %}
+            </li>
+          </ul>
+          {% if done %}
+          <div class="alert alert-danger" role="alert">
+            If you would like to move a completed order back to the incoming orders tab, select the <i>"Move to completed orders"</i> button.
+          </div>
+          {% endif %}
         <div class="row">
-            <!-- <div class="col"> -->
-                {% for order in orders %}
-                {% if order.done == False %}
+            {% for order in orders %}
                 <div class="col">
                     <div class="card my-1" style="width: 18rem;">
                         <div class="card-body">
@@ -27,28 +46,17 @@
                                 {% for food in order.foods %}
                                 {{ food.quantity}} x {{ food.name }}<br>                
                             {% endfor %}
-                              </div>
-                            <a href="{% url 'done' order.id %}" class="btn btn-success mt-2">Mark order complete</a>
+                            </div>
+                            {% if done %}
+                                <a href="{% url 'not_done' order.id %}" class="btn btn-danger mt-2">Move to incoming orders</a>
+                            {% else %}
+                                <a href="{% url 'done' order.id %}" class="btn btn-success mt-2">Move to completed orders</a>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
-
-                {% endif %}
-                {% endfor %}
-            <!-- </div> -->
-            <!-- <div class="col">
-                {% for order in orders reversed %}
-                {% if order.done == True %}
-                {{ order.name }}<br>
-                {{ order.instructions }}<br>
-                {% for food in order.foods %}
-                    {{ food.quantity}} {{ food.name }}<br>                
-                {% endfor %}
-                <a href="{% url 'not_done' order.id %}">Undo</a>
-                <br><br>
-                {% endif %}
-                {% endfor %}
-            </div> -->
+            {% endfor %}
         </div>
     </div><br>
     {{ room_name|json_script:"room-name" }}
