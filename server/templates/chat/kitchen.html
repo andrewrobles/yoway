@@ -7,22 +7,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container" cols="100" rows="20">
+    <div class="container">
         <div class="row">
-            <div class="col">
+            <!-- <div class="col"> -->
                 {% for order in orders %}
                 {% if order.done == False %}
-                {{ order.name }}<br>
-                {{ order.instructions }}<br>
-                {% for food in order.foods %}
-                    {{ food.quantity}} {{ food.name }}<br>                
-                {% endfor %}
-                <a href="{% url 'done' order.id %}">Done</a>
-                <br><br>
+                <div class="col">
+                    <div class="card my-1" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Order for {{ order.name }}</h5>
+                            {% if order.instructions != '' %}
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>Specific instructions:</strong><br>
+                                    {{ order.instructions }}
+                                </div>
+                            {% endif %}
+                            <div class="alert alert-primary" role="alert">
+                                <strong>Ordered items:</strong><br>
+                                {% for food in order.foods %}
+                                {{ food.quantity}} x {{ food.name }}<br>                
+                            {% endfor %}
+                              </div>
+                            <a href="{% url 'done' order.id %}" class="btn btn-success mt-2">Mark order complete</a>
+                        </div>
+                    </div>
+                </div>
+
                 {% endif %}
                 {% endfor %}
-            </div>
-            <div class="col">
+            <!-- </div> -->
+            <!-- <div class="col">
                 {% for order in orders reversed %}
                 {% if order.done == True %}
                 {{ order.name }}<br>
@@ -34,7 +48,7 @@
                 <br><br>
                 {% endif %}
                 {% endfor %}
-            </div>
+            </div> -->
         </div>
     </div><br>
     {{ room_name|json_script:"room-name" }}
