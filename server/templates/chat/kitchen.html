@@ -36,21 +36,21 @@
                         <div class="card-body">
                             <h5 class="card-title">Order for {{ order.name }}</h5>
                             {% if order.instructions != '' %}
-                                <div class="alert alert-warning" role="alert">
+                                <div class="alert alert-primary" role="alert">
                                     <strong>Specific instructions:</strong><br>
                                     {{ order.instructions }}
                                 </div>
                             {% endif %}
-                            <div class="alert alert-primary" role="alert">
-                                <strong>Ordered items:</strong><br>
+                            <!-- <div class="alert alert-primary" role="alert"> -->
+                                <!-- <strong>Ordered items:</strong><br> -->
                                 {% for food in order.foods %}
-                                {{ food.quantity}} x {{ food.name }}<br>                
+                                <h5>{{ food.quantity}} x {{ food.name }}</h5>               
                             {% endfor %}
-                            </div>
+                            <!-- </div> -->
                             {% if done %}
-                                <a href="{% url 'not_done' order.id %}" class="btn btn-danger mt-2">Move to incoming orders</a>
+                                <a href="{% url 'not_done' order.id %}" class="btn btn-secondary mt-2">Move to incoming orders</a>
                             {% else %}
-                                <a href="{% url 'done' order.id %}" class="btn btn-success mt-2">Move to completed orders</a>
+                                <a href="{% url 'done' order.id %}" class="btn btn-primary mt-2">Move to completed orders</a>
                             {% endif %}
 
                         </div>
