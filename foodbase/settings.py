@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['foodbase-app.herokuapp.com', 'localhost']
 
 INSTALLED_APPS = [
     'server',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,3 +125,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Channels
+ASGI_APPLICATION = 'foodbase.asgi.application'
