@@ -10,3 +10,9 @@ services:
     environment:
       - PORT=8000
       - DEBUG=1
+    depends_on:
+      - redis
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"

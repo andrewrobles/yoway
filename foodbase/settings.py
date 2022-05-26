@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['foodbase-app.herokuapp.com', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'server',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
